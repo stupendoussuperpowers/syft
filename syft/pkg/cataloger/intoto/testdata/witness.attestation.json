@@ -1,0 +1,33 @@
+{
+  "_type": "https://in-toto.io/Statement/v0.1",
+  "subject": [
+    {
+      "name": "https://witness.dev/attestations/product/v0.1/file:dist/app",
+      "digest": {
+        "sha256": "8b7df143d91c716ecfa5fc1730022f6b421b05cedee8fd52b1fc65a96030ad52"
+      }
+    }
+  ],
+  "predicateType": "https://witness.testifysec.com/attestation-collection/v0.1",
+  "predicate": {
+    "name": "build",
+    "attestations": [
+      {
+        "type": "https://witness.dev/attestations/material/v0.1",
+        "attestation": {
+          "materials": {
+            "/home/build/.venv/lib/python3.11/site-packages/requests-2.31.0.dist-info/METADATA": {
+              "sha256": "1f0b1a0c6bd1b4e0f1b7e8a0d0a0d4c58dd8bde6c9a0f7d6dbcb70b6e2f1a9c3"
+            },
+            "/home/build/go/pkg/mod/github.com/spf13/cobra@v1.8.0/command.go": {
+              "sha256": "2c0b1a0c6bd1b4e0f1b7e8a0d0a0d4c58dd8bde6c9a0f7d6dbcb70b6e2f1a9c4"
+            },
+            "/home/build/src/main.go": {
+              "sha256": "3d0b1a0c6bd1b4e0f1b7e8a0d0a0d4c58dd8bde6c9a0f7d6dbcb70b6e2f1a9c5"
+            }
+          }
+        }
+      }
+    ]
+  }
+}

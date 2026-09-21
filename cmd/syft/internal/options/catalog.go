@@ -23,6 +23,7 @@ import (
 	"github.com/anchore/syft/syft/pkg/cataloger/cpp"
 	"github.com/anchore/syft/syft/pkg/cataloger/dotnet"
 	"github.com/anchore/syft/syft/pkg/cataloger/golang"
+	"github.com/anchore/syft/syft/pkg/cataloger/intoto"
 	"github.com/anchore/syft/syft/pkg/cataloger/java"
 	"github.com/anchore/syft/syft/pkg/cataloger/javascript"
 	"github.com/anchore/syft/syft/pkg/cataloger/kernel"
@@ -53,6 +54,10 @@ type Catalog struct {
 	LinuxKernel linuxKernelConfig `yaml:"linux-kernel" json:"linux-kernel" mapstructure:"linux-kernel"`
 	Nix         nixConfig         `yaml:"nix" json:"nix" mapstructure:"nix"`
 	Python      pythonConfig      `yaml:"python" json:"python" mapstructure:"python"`
+
+	// evidence-source cataloger configuration: catalogers that gather evidence by means other
+	// than inspecting an ecosystem's own packaging artifacts
+	InToto inTotoConfig `yaml:"in-toto" json:"in-toto" mapstructure:"in-toto"`
 
 	// configuration for the source (the subject being analyzed)
 	Registry   registryConfig `yaml:"registry" json:"registry" mapstructure:"registry"`
@@ -85,6 +90,7 @@ func DefaultCatalog() Catalog {
 		Cpp:           defaultCppConfig(),
 		Dotnet:        defaultDotnetConfig(),
 		Golang:        defaultGolangConfig(),
+		InToto:        defaultInTotoConfig(),
 		Java:          defaultJavaConfig(),
 		File:          defaultFileConfig(),
 		Relationships: defaultRelationshipsConfig(),
@@ -208,6 +214,9 @@ func (cfg Catalog) ToPackagesConfig() pkgcataloging.Config {
 		LinuxKernel: kernel.LinuxKernelCatalogerConfig{
 			CatalogModules: cfg.LinuxKernel.CatalogModules,
 		},
+		InToto: intoto.DefaultCatalogerConfig().
+			WithAttestationTypes(cfg.InToto.AttestationTypes).
+			WithExcludePaths(cfg.InToto.ExcludePaths),
 		Nix: nix.DefaultConfig().
 			WithCaptureOwnedFiles(cfg.Nix.CaptureOwnedFiles),
 		Python: python.DefaultCatalogerConfig().

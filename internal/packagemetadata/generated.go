@@ -39,6 +39,7 @@ func AllTypes() []any {
 		pkg.HackageStackYamlEntry{},
 		pkg.HackageStackYamlLockEntry{},
 		pkg.HomebrewFormula{},
+		pkg.InTotoAttestationEntry{},
 		pkg.JavaArchive{},
 		pkg.JavaVMInstallation{},
 		pkg.LinuxKernel{},

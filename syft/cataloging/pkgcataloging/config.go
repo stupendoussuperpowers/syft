@@ -5,6 +5,7 @@ import (
 	"github.com/anchore/syft/syft/pkg/cataloger/cpp"
 	"github.com/anchore/syft/syft/pkg/cataloger/dotnet"
 	"github.com/anchore/syft/syft/pkg/cataloger/golang"
+	"github.com/anchore/syft/syft/pkg/cataloger/intoto"
 	"github.com/anchore/syft/syft/pkg/cataloger/java"
 	"github.com/anchore/syft/syft/pkg/cataloger/javascript"
 	"github.com/anchore/syft/syft/pkg/cataloger/kernel"
@@ -17,6 +18,7 @@ type Config struct {
 	Cpp         cpp.CatalogerConfig               `yaml:"cpp" json:"cpp" mapstructure:"cpp"`
 	Dotnet      dotnet.CatalogerConfig            `yaml:"dotnet" json:"dotnet" mapstructure:"dotnet"`
 	Golang      golang.CatalogerConfig            `yaml:"golang" json:"golang" mapstructure:"golang"`
+	InToto      intoto.CatalogerConfig            `yaml:"in-toto" json:"in-toto" mapstructure:"in-toto"`
 	JavaArchive java.ArchiveCatalogerConfig       `yaml:"java-archive" json:"java-archive" mapstructure:"java-archive"`
 	JavaScript  javascript.CatalogerConfig        `yaml:"javascript" json:"javascript" mapstructure:"javascript"`
 	LinuxKernel kernel.LinuxKernelCatalogerConfig `yaml:"linux-kernel" json:"linux-kernel" mapstructure:"linux-kernel"`
@@ -30,6 +32,7 @@ func DefaultConfig() Config {
 		Cpp:         cpp.DefaultCatalogerConfig(),
 		Dotnet:      dotnet.DefaultCatalogerConfig(),
 		Golang:      golang.DefaultCatalogerConfig(),
+		InToto:      intoto.DefaultCatalogerConfig(),
 		JavaArchive: java.DefaultArchiveCatalogerConfig(),
 		LinuxKernel: kernel.DefaultLinuxKernelCatalogerConfig(),
 		Nix:         nix.DefaultConfig(),
@@ -59,6 +62,11 @@ func (c Config) WithDotnetConfig(cfg dotnet.CatalogerConfig) Config {
 
 func (c Config) WithGolangConfig(cfg golang.CatalogerConfig) Config {
 	c.Golang = cfg
+	return c
+}
+
+func (c Config) WithInTotoConfig(cfg intoto.CatalogerConfig) Config {
+	c.InToto = cfg
 	return c
 }
 

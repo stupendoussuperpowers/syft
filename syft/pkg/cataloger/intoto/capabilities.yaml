@@ -1,0 +1,58 @@
+# Cataloger capabilities. See ../README.md for documentation.
+
+configs: # AUTO-GENERATED - config structs and their fields
+  intoto.CatalogerConfig:
+    fields:
+      - key: AttestationTypes
+        description: AttestationTypes are the witness attestation types to consider. When empty sbomit's defaults are used (material, command-run, product, network-trace).
+        app_key: in-toto.attestation-types
+      - key: ExcludePaths
+        description: ExcludePaths are filepath.Match globs applied to attested paths, on top of the built-in filtering that sbomit already does for caches and build scratch.
+        app_key: in-toto.exclude-paths
+catalogers:
+  - ecosystem: in-toto # MANUAL
+    name: in-toto-attestation-cataloger # AUTO-GENERATED
+    type: generic # AUTO-GENERATED
+    source: # AUTO-GENERATED
+      file: syft/pkg/cataloger/intoto/cataloger.go
+      function: NewCataloger
+    config: intoto.CatalogerConfig # AUTO-GENERATED
+    selectors: # AUTO-GENERATED
+      - attestation
+      - in-toto
+      - package
+    parsers: # AUTO-GENERATED structure
+      - function: parseAttestation
+        detector: # AUTO-GENERATED
+          method: glob # AUTO-GENERATED
+          criteria: # AUTO-GENERATED
+            - '**/*.intoto.json'
+            - '**/*.attestation.json'
+            - '**/*.att'
+            - '**/*.dsse.json'
+            - '**/attestation.json'
+        metadata_types: # AUTO-GENERATED
+          - pkg.InTotoAttestationEntry
+        package_types: # AUTO-GENERATED
+          - go-module
+          - python
+        purl_types: # AUTO-GENERATED
+          - golang
+          - pypi
+        json_schema_types: # AUTO-GENERATED
+          - InTotoAttestationEntry
+        capabilities: # MANUAL - preserved across regeneration
+          - name: license
+            default: false
+          - name: dependency.depth
+            default: []
+          - name: dependency.edges
+            default: ""
+          - name: dependency.kinds
+            default: []
+          - name: package_manager.files.listing
+            default: false
+          - name: package_manager.files.digests
+            default: false
+          - name: package_manager.package_integrity_hash
+            default: false

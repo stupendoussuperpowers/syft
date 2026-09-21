@@ -20,7 +20,7 @@ type AppConfigField struct {
 	DefaultValue any    // extracted from Default*() functions
 }
 
-// extractEcosystemConfigFieldsFromCatalog parses catalog.go and extracts the ecosystem-specific
+// extractEcosystemConfigFieldsFromCatalog parses catalog.go and extracts the cataloger-specific
 // config fields from the Catalog struct, returning a map of struct type name to YAML tag
 func extractEcosystemConfigFieldsFromCatalog(catalogFilePath string) (map[string]string, error) {
 	fset := token.NewFileSet()
@@ -35,8 +35,10 @@ func extractEcosystemConfigFieldsFromCatalog(catalogFilePath string) (map[string
 		return nil, fmt.Errorf("catalog struct not found in %s", catalogFilePath)
 	}
 
-	// extract ecosystem config fields from the Catalog struct
-	// these are between the "ecosystem-specific cataloger configuration" comment and the next section
+	// extract cataloger config fields from the Catalog struct
+	// these are within a section marked by a "... cataloger configuration" comment (e.g. the
+	// ecosystem-specific section, or the section for catalogers that gather evidence by other
+	// means) and run until the next section marker
 	ecosystemConfigs := make(map[string]string)
 	inEcosystemSection := false
 
@@ -44,7 +46,7 @@ func extractEcosystemConfigFieldsFromCatalog(catalogFilePath string) (map[string
 		// check for ecosystem section marker comment
 		if field.Doc != nil {
 			for _, comment := range field.Doc.List {
-				if strings.Contains(comment.Text, "ecosystem-specific cataloger configuration") {
+				if isCatalogerConfigSectionMarker(comment.Text) {
 					inEcosystemSection = true
 					break
 				}
@@ -83,6 +85,23 @@ func extractEcosystemConfigFieldsFromCatalog(catalogFilePath string) (map[string
 	}
 
 	return ecosystemConfigs, nil
+}
+
+// catalogerConfigSectionMarkers are the comments in the Catalog struct that open a section of
+// per-cataloger configuration. Not every cataloger belongs to an ecosystem (attestation ingestion
+// and binary classification are evidence-gathering methods), so there is more than one section.
+var catalogerConfigSectionMarkers = []string{
+	"ecosystem-specific cataloger configuration",
+	"evidence-source cataloger configuration",
+}
+
+func isCatalogerConfigSectionMarker(comment string) bool {
+	for _, marker := range catalogerConfigSectionMarkers {
+		if strings.Contains(comment, marker) {
+			return true
+		}
+	}
+	return false
 }
 
 // findFilesWithCatalogerImports scans the options directory for .go files that import

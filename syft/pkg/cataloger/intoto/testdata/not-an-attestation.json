@@ -1,0 +1,4 @@
+{
+  "name": "some-tool-config",
+  "predicate": "this key exists but the document is not an in-toto statement"
+}
