@@ -55,8 +55,7 @@ type Catalog struct {
 	Nix         nixConfig         `yaml:"nix" json:"nix" mapstructure:"nix"`
 	Python      pythonConfig      `yaml:"python" json:"python" mapstructure:"python"`
 
-	// evidence-source cataloger configuration: catalogers that gather evidence by means other
-	// than inspecting an ecosystem's own packaging artifacts
+	// evidence-source cataloger configuration
 	InToto inTotoConfig `yaml:"in-toto" json:"in-toto" mapstructure:"in-toto"`
 
 	// configuration for the source (the subject being analyzed)

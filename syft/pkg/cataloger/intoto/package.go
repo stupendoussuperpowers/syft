@@ -9,11 +9,6 @@ import (
 	"github.com/anchore/syft/syft/pkg"
 )
 
-// newPackage converts a package that sbomit derived from attested paths into a syft package.
-//
-// Note that the attested paths describe the build host, not the source being scanned, so the
-// package's locations point at the attestation file itself — the only place in this source where
-// there is evidence of the package. The build-host paths are preserved in the metadata.
 func newPackage(p resolve.Package, result *resolve.Result, reader file.LocationReadCloser) *pkg.Package {
 	if p.Name == "" {
 		return nil
@@ -61,8 +56,6 @@ func toDigests(digests []resolve.Digest) []file.Digest {
 	return out
 }
 
-// ownedPaths returns the attested paths that the given package claims. sbomit does not populate
-// per-package relationships yet, so today this is typically empty.
 func ownedPaths(result *resolve.Result, packageID string) []string {
 	var paths []string
 	for _, rel := range result.Relationships {

@@ -1,7 +1,6 @@
 package intoto
 
-// CatalogerConfig mirrors the knobs that sbomit's resolver exposes, so that attestation
-// ingestion can be tuned the same way from syft's application config.
+// CatalogerConfig configures how in-toto attestations are resolved into packages.
 type CatalogerConfig struct {
 	// AttestationTypes are the witness attestation types to consider. When empty sbomit's
 	// defaults are used (material, command-run, product, network-trace).

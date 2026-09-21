@@ -188,7 +188,7 @@ func DefaultPackageTaskFactories() Factories {
 			func(cfg CatalogingFactoryConfig) pkg.Cataloger {
 				return intoto.NewCataloger(cfg.PackagesConfig.InToto)
 			},
-			"in-toto", "attestation", // note: build-time evidence, not evidence of installed packages
+			"in-toto", "attestation",
 		),
 		newSimplePackageTaskFactory(bitnamiSbomCataloger.NewCataloger, "bitnami", pkgcataloging.InstalledTag, pkgcataloging.ImageTag),
 		newSimplePackageTaskFactory(wordpress.NewWordpressPluginCataloger, pkgcataloging.DirectoryTag, pkgcataloging.ImageTag, "wordpress"),

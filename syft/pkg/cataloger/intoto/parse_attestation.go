@@ -30,8 +30,6 @@ func (p attestationParser) parseAttestation(_ context.Context, _ file.Resolver, 
 		return nil, nil, fmt.Errorf("unable to read attestation file %q: %w", reader.RealPath, err)
 	}
 
-	// the globs above will match files that are not attestations at all, so treat anything
-	// unrecognized as a non-match rather than an error (same posture as the sbom cataloger).
 	if !isInTotoAttestation(data) {
 		log.WithFields("path", reader.RealPath).Trace("file is not an in-toto attestation")
 		return nil, nil, nil
@@ -60,8 +58,6 @@ func (p attestationParser) parseAttestation(_ context.Context, _ file.Resolver, 
 
 		pkgs = append(pkgs, *syftPkg)
 
-		// the package was not observed in the scanned source itself; the attestation is the
-		// evidence that it existed at build time.
 		relationships = append(relationships, artifact.Relationship{
 			From: *syftPkg,
 			To:   reader.Coordinates,
@@ -72,8 +68,6 @@ func (p attestationParser) parseAttestation(_ context.Context, _ file.Resolver, 
 	return pkgs, relationships, nil
 }
 
-// isInTotoAttestation reports whether the bytes look like something sbomit can resolve: either a
-// bare in-toto statement or a DSSE envelope wrapping one.
 func isInTotoAttestation(data []byte) bool {
 	if !json.Valid(data) {
 		return false
